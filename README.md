@@ -79,7 +79,7 @@ for example
 }
 ```
 
-If the rules are met, then the caller will receive a __201 Accepted__ response, with a link to the newly created parent
+If the rules are met, then the caller will receive a __201 Created__ response, with a link to the newly created parent
 
 ```json
 {
