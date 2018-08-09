@@ -45,7 +45,7 @@ firstname - not null or empty
 lastname - not null or empty
 emailaddress - a valid email
 dateOfBirth - a date in the past
-gender - male or female
+gender - male or female       
 
 # Children
 # Required Fields
@@ -53,7 +53,7 @@ firstname - not null or empty
 lastname - not null or empty
 emailaddress - a valid email
 dateOfBirth - a date in the past
-gender - male or female    
+gender - male or female
 
 
 
