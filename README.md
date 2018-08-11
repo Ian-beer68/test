@@ -40,7 +40,7 @@ the following is an example Json Payload
 ## Validation Rules
 # Parents
 # Required Fields
-title - not null or empty, mr mrs miss dr
+title - not null or empty, mr mrs miss master dr
 
 firstname - not null or empty
 

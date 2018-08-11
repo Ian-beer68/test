@@ -22,8 +22,7 @@ logging:
     org:
       ian:
         gohenry: DEBUG
-#    org:
-#      springframework: DEBUG
+      springframework: ERROR
 
 spring:
   jackson:
