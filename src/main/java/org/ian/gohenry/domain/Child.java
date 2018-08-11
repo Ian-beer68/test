@@ -4,6 +4,7 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -17,6 +18,7 @@ import java.time.LocalDate;
 public class Child {
     private Long id;
     private String firstname;
+    private String secondName;
     private String lastname;
     private String emailaddress;
     private LocalDate dateofbirth;
@@ -26,15 +28,10 @@ public class Child {
     public Child() {
     }
 
-    public Child(Long id,
-                 String firstname,
-                 String lastname,
-                 String emailaddress,
-                 LocalDate dateofbirth,
-                 String gender,
-                 Parent parent) {
+    public Child(Long id, String firstname, String secondName, String lastname, String emailaddress, LocalDate dateofbirth, String gender, Parent parent) {
         this.id = id;
         this.firstname = firstname;
+        this.secondName = secondName;
         this.lastname = lastname;
         this.emailaddress = emailaddress;
         this.dateofbirth = dateofbirth;
@@ -50,6 +47,10 @@ public class Child {
 
     public String getFirstname() {
         return firstname;
+    }
+
+    public String getSecondName() {
+        return secondName;
     }
 
     public String getLastname() {
@@ -68,8 +69,8 @@ public class Child {
         return gender;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "parent_id")
+    @ManyToOne( cascade = CascadeType.ALL)
+    @JoinColumn(name = "pid", referencedColumnName = "id")
     public Parent getParent() {
         return parent;
     }
@@ -100,6 +101,10 @@ public class Child {
 
     public void setParent(Parent parent) {
         this.parent = parent;
+    }
+
+    public void setSecondName(String secondName) {
+        this.secondName = secondName;
     }
 
     @Override

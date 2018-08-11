@@ -1,23 +1,15 @@
-package org.ian.gohenry.domain;
+package org.ian.gohenry.dto;
 
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.apache.commons.lang3.builder.ToStringBuilder;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import org.ian.gohenry.domain.Child;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
 import java.time.LocalDate;
 import java.util.Set;
 
-@Entity
-@Table(name = "parents")
-public class Parent {
+@JsonPropertyOrder({"id","title","firstName","lastName", "emailAddress", "dateOfBirth","gender", "secondName", "children"})
+public class ParentDTO {
     private Long id;
     private String title;
     private String firstname;
@@ -26,12 +18,21 @@ public class Parent {
     private String emailaddress;
     private LocalDate dateofbirth;
     private String gender;
-    private Set<Child> children;
+    private Set<ChildDTO> children;
 
-    public Parent() {
+    public ParentDTO() {
     }
 
-    public Parent(Long id, String title, String firstname, String lastname, String secondname, String emailaddress, LocalDate dateofbirth, String gender, Set<Child> children) {
+    @JsonCreator
+    public ParentDTO(@JsonProperty("id")Long id,
+                  @JsonProperty("title") String title,
+                  @JsonProperty("firstName")String firstname,
+                  @JsonProperty("secondName")String secondname,
+                  @JsonProperty("lastName")String lastname,
+                  @JsonProperty("emailAddress")String emailaddress,
+                  @JsonProperty("dateOfBirth")LocalDate dateofbirth,
+                  @JsonProperty("gender")String gender,
+                  @JsonProperty("children")Set<ChildDTO> children) {
         this.id = id;
         this.title = title;
         this.firstname = firstname;
@@ -42,43 +43,40 @@ public class Parent {
         this.gender = gender;
         this.children = children;
     }
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @JsonProperty("id")
     public Long getId() {
         return id;
     }
-
+    @JsonProperty("title")
     public String getTitle() {
         return title;
     }
-
+    @JsonProperty("firstName")
     public String getFirstname() {
         return firstname;
     }
-
-    public String getSecondname() {
-        return secondname;
-    }
-
+    @JsonProperty("lastName")
     public String getLastname() {
         return lastname;
     }
-
+    @JsonProperty("secondName")
+    public String getSecondname() {
+        return secondname;
+    }
+    @JsonProperty("emailAddress")
     public String getEmailaddress() {
         return emailaddress;
     }
-
+    @JsonProperty("dateOfBirth")
     public LocalDate getDateofbirth() {
         return dateofbirth;
     }
-
+    @JsonProperty("gender")
     public String getGender() {
         return gender;
     }
-
-    @OneToMany( fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    public Set<Child> getChildren() {
+    @JsonProperty("children")
+    public Set<ChildDTO> getChildren() {
         return children;
     }
 
@@ -94,12 +92,12 @@ public class Parent {
         this.firstname = firstname;
     }
 
-    public void setSecondname(String secondname) {
-        this.secondname = secondname;
-    }
-
     public void setLastname(String lastname) {
         this.lastname = lastname;
+    }
+
+    public void setSecondname(String secondname) {
+        this.secondname = secondname;
     }
 
     public void setEmailaddress(String emailaddress) {
@@ -114,22 +112,7 @@ public class Parent {
         this.gender = gender;
     }
 
-    public void setChildren(Set<Child> children) {
+    public void setChildren(Set<ChildDTO> children) {
         this.children = children;
-    }
-
-    @Override
-    public int hashCode() {
-        return HashCodeBuilder.reflectionHashCode(this);
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        return EqualsBuilder.reflectionEquals(this, o);
-    }
-
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this);
     }
 }
