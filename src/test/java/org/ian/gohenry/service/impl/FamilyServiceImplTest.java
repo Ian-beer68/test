@@ -41,7 +41,17 @@ public class FamilyServiceImplTest {
 
     @Test
     public void shouldGetParent() throws Exception {
+        Parent parent = new Parent();
+        parent.setId(1l);
+        parent.setEmailaddress("meh@meh.com");
 
+        when(parentDAO.findOne(1l)).thenReturn(parent);
+
+        Parent ret = underTest.getParentPlusChildren(1l);
+
+        assertNotNull(ret);
+
+        verify(parentDAO).findOne(1l);
     }
 
 }
