@@ -29,41 +29,4 @@ public class ParentTest {
         assertThat(parent.getChildren(), is(children));
     }
 
-    @Test
-    public void shouldJson() throws Exception {
-        String in = "{  \n" +"   \"title\":\"Mrs\",\n" +
-                "   \"firstName\":\"Jane\",\n" +
-                "   \"lastName\":\"Doe\",\n" +
-                "   \"emailAddress\":\"jane.doe@gohenry.co.uk\",\n" +
-                "   \"dateOfBirth\":\"1990-06-03\",\n" +
-                "   \"gender\":\"female\",\n" +
-                "   \"secondName\":\"\",\n" +
-                "   \"children\":[  \n" +
-                "      {  \n" +
-                "         \"firstName\":\"Janet\",\n" +
-                "         \"lastName\":\"Doe\",\n" +
-                "         \"emailAddress\":\"janet.doe@gohenry.co.uk\",\n" +
-                "         \"dateOfBirth\":\"2010-05-22\",\n" +
-                "         \"gender\":\"female\",\n" +
-                "         \"secondName\":\"\"\n" +
-                "      },\n" +
-                "      {  \n" +
-                "         \"firstName\":\"Jason\",\n" +
-                "         \"lastName\":\"Doe\",\n" +
-                "         \"emailAddress\":\"jason.doe@gohenry.co.uk\",\n" +
-                "         \"dateOfBirth\":\"2008-12-05\",\n" +
-                "         \"gender\":\"male\",\n" +
-                "         \"secondName\":\"\"\n" +
-                "      }\n" +
-                "   ]\n" +
-                "}";
-
-        ObjectMapper om = new ObjectMapper();
-        om.findAndRegisterModules();
-
-        Parent p = om.readValue(in, Parent.class);
-
-        System.out.println("hi");
-    }
-
 }

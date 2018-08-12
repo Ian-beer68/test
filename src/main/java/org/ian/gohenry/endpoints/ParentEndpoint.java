@@ -59,11 +59,11 @@ public class ParentEndpoint {
 
         ParentDTO dto = convertToDTO(p);
 
-        Resource<ParentDTO> resource = new Resource<>(dto);
-        ControllerLinkBuilder linkto = ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(this.getClass()).getParentWithChildren(dto.getId()));
-        resource.add(linkto.withRel("self"));
+//        Resource<ParentDTO> resource = new Resource<>(dto);
+//        ControllerLinkBuilder linkto = ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(this.getClass()).getParentWithChildren(dto.getId()));
+//        resource.add(linkto.withRel("self"));
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(resource);
+        return ResponseEntity.status(HttpStatus.CREATED).body(dto);
     }
 
     @GetMapping(path = "/{parent_id}", produces = {MediaType.APPLICATION_JSON_VALUE})
