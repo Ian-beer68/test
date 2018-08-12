@@ -6,8 +6,11 @@ import org.ian.gohenry.domain.Parent;
 import org.ian.gohenry.service.FamilyService;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
+import org.modelmapper.ModelMapper;
 import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -22,11 +25,13 @@ import java.time.LocalDate;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
+@RunWith(MockitoJUnitRunner.class)
 public class ParentEndpointTest {
     private MockMvc mockMvc;
 
@@ -36,11 +41,17 @@ public class ParentEndpointTest {
     @InjectMocks
     public ParentEndpoint underTest;
 
+
+
     @Before
     public void setUp() throws Exception{
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         Validator validator = factory.getValidator();
-        ReflectionTestUtils.setField(underTest, "validator", validator);
+        ModelMapper mapper = new ModelMapper();
+
+        ReflectionTestUtils.setField(underTest, "validator",validator);
+        ReflectionTestUtils.setField(underTest, "modelMapper",mapper);
+
         // Initializes the JacksonTester
         ObjectMapper om = new ObjectMapper();
         om.findAndRegisterModules();
@@ -60,7 +71,7 @@ public class ParentEndpointTest {
                 "   \"emailAddress\":\"jane.doe@gohenry.co.uk\",\n" +
                 "   \"dateOfBirth\":\"1990-06-03\",\n" +
                 "   \"gender\":\"female\",\n" +
-                "   \"secondName\":\"\",\n" +
+                "   \"secondName\":\"\"\n"+
                 "}\n";
 
         Parent parent = new Parent(1l,
@@ -73,24 +84,27 @@ public class ParentEndpointTest {
                 "female",
                 null);
 
-        when(familyService.createParent(parent)).thenReturn(parent);
+        when(familyService.createParent(any(Parent.class))).thenReturn(parent);
 
         MockHttpServletResponse response = mockMvc.perform(
                 post("/parents")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(inJson))
-                .andReturn().getResponse();
+                        .andReturn().getResponse();
+
+        assertThat(response.getStatus(), is(201));
 
         String responseStr = response.getContentAsString();
+        System.out.println(responseStr);
 
         assertThat(responseStr.contains("mrs"), is(true));
         assertThat(responseStr.contains("1"), is(true));
         assertThat(responseStr.contains("Jane"), is(true));
         assertThat(responseStr.contains("Doe"), is(true));
+        //assertThat(responseStr.contains("http://localhost:8080/parents/1"), is(true));
 
 
-
-        verify(familyService).createParent(parent);
+        verify(familyService).createParent(any(Parent.class));
     }
 
     @Test
