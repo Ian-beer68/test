@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
 import javax.validation.constraints.Pattern;
 import java.time.LocalDate;
 import java.util.Set;
@@ -15,7 +16,7 @@ import java.util.Set;
 public class ParentDTO {
     private Long id;
     @NotNull(message = "must not be null")
-    @NotEmpty(message = "must not be empty")
+    @Pattern(message = "must be Mr Mrs Miss Master or Dr", regexp = "^(Mr|Mrs|Miss|Master|Dr)$")
     private String title;
     @NotNull(message = "must not be null")
     @NotEmpty(message = "must not be empty")
@@ -26,7 +27,7 @@ public class ParentDTO {
     private String secondname;
     @Email(message = "must be an email address")
     private String emailaddress;
-    @Email(message = "must be an email address")
+    @Past(message = "date must be in the past")
     private LocalDate dateofbirth;
     @NotNull(message = "must not be null")
     @Pattern(message = "must be male or female", regexp = "^(male|female)$")
