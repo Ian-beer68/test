@@ -130,4 +130,8 @@ example response
 
 ```
 
-
+## Swagger
+to generate swagger on the fly go to URL
+```
+http:\\localhost:8080\v2\api-docs
+```
