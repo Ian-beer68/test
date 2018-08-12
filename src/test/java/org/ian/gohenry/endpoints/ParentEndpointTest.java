@@ -85,6 +85,7 @@ public class ParentEndpointTest {
 
         when(familyService.createParent(any(Parent.class))).thenReturn(parent);
 
+
         MockHttpServletResponse response = mockMvc.perform(
                 post("/parents")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -94,13 +95,13 @@ public class ParentEndpointTest {
         assertThat(response.getStatus(), is(201));
 
         String responseStr = response.getContentAsString();
-        System.out.println(responseStr);
 
         assertThat(responseStr.contains("mrs"), is(true));
         assertThat(responseStr.contains("1"), is(true));
         assertThat(responseStr.contains("Jane"), is(true));
         assertThat(responseStr.contains("Doe"), is(true));
-        //assertThat(responseStr.contains("http://localhost:8080/parents/1"), is(true));
+        assertThat(responseStr.contains("female"), is(true));
+        assertThat(responseStr.contains("http://localhost/parents/1"), is(true));
 
 
         verify(familyService).createParent(any(Parent.class));

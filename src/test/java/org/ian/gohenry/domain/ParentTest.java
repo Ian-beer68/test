@@ -29,4 +29,25 @@ public class ParentTest {
         assertThat(parent.getChildren(), is(children));
     }
 
+    @Test
+    public void shouldHashCode() throws Exception {
+        LocalDate ld = LocalDate.now();
+        Parent parent = new Parent();
+        parent.setDateofbirth(ld);
+
+        int hashCode = parent.hashCode();
+
+        assertThat(Math.abs(hashCode) > 0, is(true));
+    }
+
+    @Test
+    public void shouldToString() throws Exception {
+        LocalDate ld = LocalDate.now();
+        Parent parent = new Parent();
+        parent.setDateofbirth(ld);
+
+        String toStr = parent.toString();
+
+        assertThat(toStr.contains(ld.toString()), is(true));
+    }
 }

@@ -9,6 +9,8 @@ import org.modelmapper.convention.NamingConventions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.Resource;
+import org.springframework.hateoas.mvc.ControllerLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -37,7 +39,7 @@ public class ParentEndpoint {
     @Autowired
     private Validator validator;
 
-    @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE})
+    @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity createParent(@RequestBody ParentDTO parent) {
 
         final Set<ConstraintViolation<ParentDTO>> violations = validator.validate(parent);
@@ -56,12 +58,11 @@ public class ParentEndpoint {
         p = familyService.createParent(p);
 
         ParentDTO dto = convertToDTO(p);
-        //TODO:figure out why this is breaking the test
-//        Resource<ParentDTO> resource = new Resource<>(dto);
-//        ControllerLinkBuilder linkto = ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(this.getClass()).getParentWithChildren(dto.getId()));
-//        resource.add(linkto.withRel("self"));
+        Resource<ParentDTO> resource = new Resource<>(dto);
+        ControllerLinkBuilder linkto = ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(this.getClass()).getParentWithChildren(dto.getId()));
+        resource.add(linkto.withRel("self"));
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(dto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(resource);
     }
 
     @GetMapping(path = "/{parent_id}", produces = {MediaType.APPLICATION_JSON_VALUE})
