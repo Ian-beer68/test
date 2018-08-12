@@ -42,15 +42,14 @@ public class ParentEndpointTest {
     public ParentEndpoint underTest;
 
 
-
     @Before
-    public void setUp() throws Exception{
+    public void setUp() throws Exception {
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         Validator validator = factory.getValidator();
         ModelMapper mapper = new ModelMapper();
 
-        ReflectionTestUtils.setField(underTest, "validator",validator);
-        ReflectionTestUtils.setField(underTest, "modelMapper",mapper);
+        ReflectionTestUtils.setField(underTest, "validator", validator);
+        ReflectionTestUtils.setField(underTest, "modelMapper", mapper);
 
         // Initializes the JacksonTester
         ObjectMapper om = new ObjectMapper();
@@ -71,7 +70,7 @@ public class ParentEndpointTest {
                 "   \"emailAddress\":\"jane.doe@gohenry.co.uk\",\n" +
                 "   \"dateOfBirth\":\"1990-06-03\",\n" +
                 "   \"gender\":\"female\",\n" +
-                "   \"secondName\":\"\"\n"+
+                "   \"secondName\":\"\"\n" +
                 "}\n";
 
         Parent parent = new Parent(1l,
@@ -80,7 +79,7 @@ public class ParentEndpointTest {
                 "Doe",
                 null,
                 "jane.doe@gohenry.co.uk",
-                LocalDate.of(1990,06,03),
+                LocalDate.of(1990, 06, 03),
                 "female",
                 null);
 
@@ -90,7 +89,7 @@ public class ParentEndpointTest {
                 post("/parents")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(inJson))
-                        .andReturn().getResponse();
+                .andReturn().getResponse();
 
         assertThat(response.getStatus(), is(201));
 
@@ -116,7 +115,7 @@ public class ParentEndpointTest {
                 "   \"emailAddress\":\"\",\n" +
                 "   \"dateOfBirth\":\"2099-06-03\",\n" +
                 "   \"gender\":\"\",\n" +
-                "   \"secondName\":\"\",\n" +
+                "   \"secondName\":\"\"\n" +
                 "}\n";
 
         MockHttpServletResponse response = mockMvc.perform(
@@ -124,6 +123,15 @@ public class ParentEndpointTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(inJson))
                 .andReturn().getResponse();
+
+        assertThat(response.getStatus(), is(400));
+
+        String responseStr = response.getContentAsString();
+        assertThat(responseStr.contains("\"dateofbirth\":\"date must be in the past\""), is(true));
+        assertThat(responseStr.contains("\"firstname\":\"must not be empty\""), is(true));
+        assertThat(responseStr.contains("\"title\":\"must be Mr Mrs Miss Master or Dr\""), is(true));
+        assertThat(responseStr.contains("\"gender\":\"must be male or female\""), is(true));
+        assertThat(responseStr.contains("\"lastname\":\"must not be empty\""), is(true));
 
     }
 
@@ -136,13 +144,39 @@ public class ParentEndpointTest {
         LocalDate dob = LocalDate.now();
         String gender = "male";
 
+        Parent parent = new Parent(1l, title, name, surname, null, email, dob, gender, null);
 
-        Parent parent = new Parent(1l, title, name, surname,null, email, dob, gender, null);
+        when(familyService.getParentPlusChildren(1l)).thenReturn(parent);
 
         MockHttpServletResponse response = mockMvc.perform(
                 get("/parents/1"))
                 .andReturn().getResponse();
 
+        assertThat(response.getStatus(), is(200));
+        String responseStr = response.getContentAsString();
+
+        assertThat(responseStr.contains(title), is(true));
+        assertThat(responseStr.contains(name), is(true));
+        assertThat(responseStr.contains(surname), is(true));
+        assertThat(responseStr.contains(email), is(true));
+        assertThat(responseStr.contains(gender), is(true));
+
+        verify(familyService).getParentPlusChildren(1l);
+    }
+
+    @Test
+    public void shouldNotGetParent() throws Exception {
+
+
+        when(familyService.getParentPlusChildren(1l)).thenReturn(null);
+
+        MockHttpServletResponse response = mockMvc.perform(
+                get("/parents/1"))
+                .andReturn().getResponse();
+
+        assertThat(response.getStatus(), is(404));
+
+        verify(familyService).getParentPlusChildren(1l);
 
     }
 

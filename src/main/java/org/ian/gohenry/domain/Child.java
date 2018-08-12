@@ -41,7 +41,7 @@ public class Child {
 
     @Id
     @GeneratedValue
-    private Long getId() {
+    public Long getId() {
         return id;
     }
 

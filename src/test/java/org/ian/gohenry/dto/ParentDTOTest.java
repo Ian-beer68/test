@@ -21,7 +21,7 @@ public class ParentDTOTest {
         parent.setDateofbirth(ld);
         assertThat(parent.getDateofbirth(), is(ld));
 
-        ChildDTO c = new ChildDTO();
+        ChildDTO c = new ChildDTO(1l, "dan", "doe","charlie","ddoe@does.com",ld,"male");
         Set<ChildDTO> children = new HashSet<>();
         children.add(c);
 

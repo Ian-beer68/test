@@ -9,8 +9,6 @@ import org.modelmapper.convention.NamingConventions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.Resource;
-import org.springframework.hateoas.mvc.ControllerLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -58,7 +56,7 @@ public class ParentEndpoint {
         p = familyService.createParent(p);
 
         ParentDTO dto = convertToDTO(p);
-
+        //TODO:figure out why this is breaking the test
 //        Resource<ParentDTO> resource = new Resource<>(dto);
 //        ControllerLinkBuilder linkto = ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(this.getClass()).getParentWithChildren(dto.getId()));
 //        resource.add(linkto.withRel("self"));

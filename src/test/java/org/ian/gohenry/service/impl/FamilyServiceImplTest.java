@@ -54,4 +54,16 @@ public class FamilyServiceImplTest {
         verify(parentDAO).findOne(1l);
     }
 
+    @Test
+    public void shouldNotGetParent() throws Exception {
+
+
+        when(parentDAO.findOne(1l)).thenReturn(null);
+
+        Parent ret = underTest.getParentPlusChildren(1l);
+
+        assertNull(ret);
+
+        verify(parentDAO).findOne(1l);
+    }
 }
